@@ -8,14 +8,14 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="room")
-@SQLDelete(sql = "UPDATE room SET is_removed = true WHERE id = ?")
+@Table(name="rooms")
+@SQLDelete(sql = "UPDATE rooms SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")
 public class Room extends AbstractEntity{
     @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
-    @JoinColumn(name="sensor_id")
+    @JoinColumn(name="sensors_id")
     List<Sensor> sensors;
     @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.EAGER)
-    @JoinColumn(name="device_id")
+    @JoinColumn(name="devices_id")
     List<Device> devices;
 }

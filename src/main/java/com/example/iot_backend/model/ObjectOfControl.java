@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="object_of_control")
-@SQLDelete(sql = "UPDATE object_of_control SET is_removed = true WHERE id = ?")
+@Table(name="objects_of_control")
+@SQLDelete(sql = "UPDATE objects_of_control SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")
 public class ObjectOfControl extends AbstractEntity{
     @Column(name = "location_country")
@@ -18,12 +18,12 @@ public class ObjectOfControl extends AbstractEntity{
     private String locationAddress;
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "object_of_control_user",
-            joinColumns = { @JoinColumn(name = "object_of_control_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+            name = "objects_of_control_user",
+            joinColumns = { @JoinColumn(name = "objects_of_control_id") },
+            inverseJoinColumns = { @JoinColumn(name = "users_id") }
     )
     private List<User> users;
     @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @JoinColumn(name="room_id")
+    @JoinColumn(name="rooms_id")
     private List<Room> rooms;
 }

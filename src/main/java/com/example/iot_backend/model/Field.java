@@ -9,8 +9,8 @@ import org.hibernate.annotations.Where;
 
 @Data
 @Entity
-@Table(name="field")
-@SQLDelete(sql = "UPDATE field SET is_removed = true WHERE id = ?")
+@Table(name="fields")
+@SQLDelete(sql = "UPDATE fields SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")
 public class Field extends AbstractEntity{
     @Column(name = "float_value")
