@@ -1,16 +1,10 @@
 package com.example.iot_backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 @Data
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
     @Id
