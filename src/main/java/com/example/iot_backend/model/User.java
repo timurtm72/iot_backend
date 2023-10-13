@@ -28,6 +28,4 @@ public class User extends AbstractEntity{
     private String login;
     @Column(name="password",nullable = false)
     private String password;
-    @ManyToMany(mappedBy = "users")
-    List<ObjectOfControl> objOfCtrl;
 }
