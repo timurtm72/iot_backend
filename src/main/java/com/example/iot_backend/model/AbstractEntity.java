@@ -21,15 +21,15 @@ public abstract class AbstractEntity implements Serializable {
     LocalDateTime removedAt;
     @Column(name="modified_at",nullable = false)
     LocalDateTime modifiedAt;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id_created_at")
-    private User createdAtUser;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id_modified_at")
-    private User modifiedAtUser;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id_removed_at")
-    private User removedAtUser;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id_created_at")
+//    private User createdAtUser;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id_modified_at")
+//    private User modifiedAtUser;
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id_removed_at")
+//    private User removedAtUser;
     @Column(name = "is_removed", nullable = false)
     private boolean isRemoved = Boolean.FALSE;
     @PrePersist

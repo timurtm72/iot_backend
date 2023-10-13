@@ -17,8 +17,6 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE users SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")
 public class User extends AbstractEntity{
-    @Column(name="first_name",nullable = false)
-    private String firstName;
     @Column(name="last_name",nullable = false)
     private String lastName;
     @Column(name = "role", nullable = false)
