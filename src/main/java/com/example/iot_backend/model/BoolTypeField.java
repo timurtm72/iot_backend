@@ -2,6 +2,8 @@ package com.example.iot_backend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -9,9 +11,11 @@ import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Entity
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name = "bool_type_fields")
 @SQLDelete(sql = "UPDATE bool_type_fields SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")

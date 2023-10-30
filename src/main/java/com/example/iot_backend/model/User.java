@@ -4,15 +4,17 @@ import com.example.iot_backend.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import java.util.List;
 
 @Data
-@Entity
-@AllArgsConstructor
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="users")
 @SQLDelete(sql = "UPDATE users SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")

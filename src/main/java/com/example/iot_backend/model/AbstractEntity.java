@@ -1,11 +1,18 @@
 package com.example.iot_backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-@Data
 @MappedSuperclass
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
