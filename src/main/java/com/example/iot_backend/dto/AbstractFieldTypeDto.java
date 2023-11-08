@@ -1,12 +1,10 @@
 package com.example.iot_backend.dto;
-
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode
@@ -14,11 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AbstractFieldTypeDto  <Value>  implements Serializable {
     private Long id;
-    private LocalDateTime timeStamp;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime timeStamp;
+    @NotEmpty(message = "Значение не можеть быть пустым")
     private Value value;
-
-    @PrePersist
-    public void toCreate(){
-        this.setTimeStamp(LocalDateTime.now());
-    }
 }

@@ -23,4 +23,8 @@ public abstract class AbstractFieldType <Value>  implements Serializable {
     private LocalDateTime timeStamp;
     @Column(name="value",nullable = false)
     private Value value;
+    @PrePersist
+    public void toCreate(){
+        this.setTimeStamp(LocalDateTime.now());
+    }
 }
