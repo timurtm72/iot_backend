@@ -8,11 +8,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+@MappedSuperclass
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
 public abstract class AbstractEntityDto implements Serializable {
     private Long id;
     @NotBlank(message = "Название не может быть пустым")
