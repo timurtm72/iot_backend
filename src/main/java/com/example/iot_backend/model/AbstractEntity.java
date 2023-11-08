@@ -23,11 +23,11 @@ public abstract class AbstractEntity implements Serializable {
     @Column(name="description")
     private String description;
     @Column(name="created_at",nullable = false)
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     @Column(name="removed_at",nullable = false)
-    LocalDateTime removedAt;
+    private LocalDateTime removedAt;
     @Column(name="modified_at",nullable = false)
-    LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt;
 //    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id_created_at")
 //    private User createdAtUser;

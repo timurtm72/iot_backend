@@ -20,12 +20,12 @@ import java.util.List;
 @Where(clause = "is_removed=false")
 public class Device extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "floatTypeDeviceFields_id")
+    @JoinColumn(name = "float_type_device_fields_id")
     List<FloatTypeField> floatTypeDeviceFields;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "longTypeDeviceFields_id")
+    @JoinColumn(name = "long_type_device_fields_id")
     List<LongTypeField> longTypeDeviceFields;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "boolTypeDeviceFields_id")
+    @JoinColumn(name = "bool_type_device_fields_id")
     List<BoolTypeField> boolTypeDeviceFields;
 }
