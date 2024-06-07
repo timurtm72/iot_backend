@@ -1,7 +1,7 @@
 package com.example.iot_backend.model.device;
 
 
-import com.example.iot_backend.model.Base.FloatDeviceBase;
+import com.example.iot_backend.model.base.FloatDeviceBase;
 import com.example.iot_backend.model.object.AbstractEntity;
 import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;

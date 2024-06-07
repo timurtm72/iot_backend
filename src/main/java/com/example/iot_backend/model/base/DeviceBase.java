@@ -1,6 +1,5 @@
-package com.example.iot_backend.model.Base;
+package com.example.iot_backend.model.base;
 
-import com.example.iot_backend.enums.RegMode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,18 +12,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public abstract class RegulatorDeviceBase  implements Serializable {
+public abstract class DeviceBase implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "reg_mode")
-    @Enumerated(EnumType.STRING)
-    private RegMode regMode;
-    @Column(name = "set_value", nullable = false)
-    private Float setValue;
 
-    @Column(name = "hysteresis", nullable = false)
-    private Float hysteresis;
+    @Column(name = "in_out_type", nullable = false)
+    private String inOutType;
 
     @Column(name = "name", nullable = false)
     private String name;

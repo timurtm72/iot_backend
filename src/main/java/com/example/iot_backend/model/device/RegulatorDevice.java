@@ -1,7 +1,6 @@
 package com.example.iot_backend.model.device;
 
-import com.example.iot_backend.model.Base.RegulatorDeviceBase;
-import com.example.iot_backend.model.object.FloatDeviceData;
+import com.example.iot_backend.model.base.RegulatorDeviceBase;
 import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;
 import lombok.*;

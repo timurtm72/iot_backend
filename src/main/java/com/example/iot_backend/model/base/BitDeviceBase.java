@@ -1,4 +1,4 @@
-package com.example.iot_backend.model.Base;
+package com.example.iot_backend.model.base;
 
 import com.example.iot_backend.model.device.RelayDevice;
 import com.example.iot_backend.model.device.SwitchDevice;
