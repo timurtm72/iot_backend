@@ -1,6 +1,8 @@
 package com.example.iot_backend.model.device;
 
 import com.example.iot_backend.model.base.RegulatorDeviceBase;
+import com.example.iot_backend.model.object.ErrorDeviceData;
+import com.example.iot_backend.model.object.FloatDeviceData;
 import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +31,7 @@ public class RegulatorDevice extends RegulatorDeviceBase {
     private List<SensorDevice> deviceSensors;
     @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SwitchDevice> deviceSwitches;
-    @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AlarmDevice> regAlarms;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "error_values", joinColumns = @JoinColumn(name = "error_values_id"))
+    private List<ErrorDeviceData> floatValues;
 }

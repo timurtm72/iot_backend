@@ -1,6 +1,7 @@
 package com.example.iot_backend.model.base;
 
 import com.example.iot_backend.model.device.SensorDevice;
+import com.example.iot_backend.model.object.ErrorDeviceData;
 import com.example.iot_backend.model.object.FloatDeviceData;
 import jakarta.persistence.*;
 import lombok.*;

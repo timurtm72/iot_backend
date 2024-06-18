@@ -3,6 +3,7 @@ package com.example.iot_backend.model.device;
 
 import com.example.iot_backend.model.base.BitDeviceBase;
 import com.example.iot_backend.model.object.AbstractEntity;
+import com.example.iot_backend.model.object.ErrorDeviceData;
 import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,6 @@ import java.util.List;
 public class SwitchDevice extends AbstractEntity {
     @OneToMany(mappedBy = "switchDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BitDeviceBase> switches;
-
     @ManyToOne
     @JoinColumn(name = "regulator_device_id")
     private RegulatorDevice regulatorDevice;

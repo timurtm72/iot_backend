@@ -3,6 +3,8 @@ package com.example.iot_backend.model.base;
 import com.example.iot_backend.model.device.RelayDevice;
 import com.example.iot_backend.model.device.SwitchDevice;
 import com.example.iot_backend.model.object.BitDeviceData;
+import com.example.iot_backend.model.object.ErrorDeviceData;
+import com.example.iot_backend.model.object.FloatDeviceData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;

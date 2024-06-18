@@ -1,9 +1,12 @@
 package com.example.iot_backend.model.base;
 
+import com.example.iot_backend.model.object.ErrorDeviceData;
+import com.example.iot_backend.model.object.FloatDeviceData;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @MappedSuperclass
 @EqualsAndHashCode

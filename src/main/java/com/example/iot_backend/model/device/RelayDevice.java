@@ -3,6 +3,7 @@ package com.example.iot_backend.model.device;
 
 import com.example.iot_backend.model.base.BitDeviceBase;
 import com.example.iot_backend.model.object.AbstractEntity;
+import com.example.iot_backend.model.object.ErrorDeviceData;
 import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;
 import lombok.*;
