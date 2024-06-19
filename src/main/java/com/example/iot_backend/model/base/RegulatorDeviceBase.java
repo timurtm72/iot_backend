@@ -17,6 +17,8 @@ public abstract class RegulatorDeviceBase  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "ip_address", nullable = false)
+    private String ipAddress;
     @Column(name = "reg_mode")
     @Enumerated(EnumType.STRING)
     private RegMode regMode;

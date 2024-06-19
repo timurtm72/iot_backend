@@ -35,6 +35,6 @@ public class RegulatorDevice extends RegulatorDeviceBase {
     @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SwitchSection> switchSection;
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "error_values", joinColumns = @JoinColumn(name = "error_values_id"))
-    private List<ErrorDeviceData> floatValues;
+    @CollectionTable(name = "reg_errors", joinColumns = @JoinColumn(name = "reg_error_id"))
+    private List<ErrorDeviceData> regErrors;
 }
