@@ -4,6 +4,9 @@ import com.example.iot_backend.model.base.RegulatorDeviceBase;
 import com.example.iot_backend.model.object.ErrorDeviceData;
 import com.example.iot_backend.model.object.FloatDeviceData;
 import com.example.iot_backend.model.object.Room;
+import com.example.iot_backend.model.section.RelaySection;
+import com.example.iot_backend.model.section.SensorSection;
+import com.example.iot_backend.model.section.SwitchSection;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -26,11 +29,11 @@ public class RegulatorDevice extends RegulatorDeviceBase {
     @JoinColumn(name = "room_id")
     private Room room;
     @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RelayDevice> deviceRelays;
+    private List<RelaySection> relaySection;
     @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SensorDevice> deviceSensors;
+    private List<SensorSection> sensorsSection;
     @OneToMany(mappedBy = "regulatorDevice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SwitchDevice> deviceSwitches;
+    private List<SwitchSection> switchSection;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "error_values", joinColumns = @JoinColumn(name = "error_values_id"))
     private List<ErrorDeviceData> floatValues;

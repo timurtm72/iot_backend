@@ -3,6 +3,7 @@ package com.example.iot_backend.model.base;
 import com.example.iot_backend.model.device.SensorDevice;
 import com.example.iot_backend.model.object.ErrorDeviceData;
 import com.example.iot_backend.model.object.FloatDeviceData;
+import com.example.iot_backend.model.section.SensorSection;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -28,4 +29,8 @@ public class FloatDeviceBase extends DeviceBase {
     @ManyToOne
     @JoinColumn(name = "sensor_device_id")
     private SensorDevice sensorDevice;
+
+    @ManyToOne
+    @JoinColumn(name = "sensor_section_id")
+    private SensorSection sensorSection;
 }
