@@ -1,6 +1,5 @@
 package com.example.iot_backend.model.object;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
 import java.time.LocalDateTime;

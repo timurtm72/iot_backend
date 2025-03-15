@@ -1,9 +1,8 @@
 package com.example.iot_backend.model.object;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -13,7 +12,12 @@ import java.time.LocalDateTime;
 @ToString
 @Embeddable
 public class Location {
-    String country;
-    String city;
-    String address;
+    @Column(name = "country", nullable = false)
+    private String country;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "address", nullable = false)
+    private String address;
 }
