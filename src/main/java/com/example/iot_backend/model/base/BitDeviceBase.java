@@ -1,10 +1,8 @@
 package com.example.iot_backend.model.base;
 
-import com.example.iot_backend.model.device.RelayDevice;
-import com.example.iot_backend.model.device.SwitchDevice;
-import com.example.iot_backend.model.object.BitDeviceData;
-import com.example.iot_backend.model.section.RelaySection;
-import com.example.iot_backend.model.section.SwitchSection;
+import com.example.iot_backend.model.initial.Relay;
+import com.example.iot_backend.model.initial.Switch;
+import com.example.iot_backend.model.data.BitData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -26,21 +24,14 @@ public class BitDeviceBase extends DeviceBase {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "bit_values", joinColumns = @JoinColumn(name = "bit_values_id"))
-    private List<BitDeviceData> bitValues;
+    private List<BitData> bitValues;
 
     @ManyToOne
     @JoinColumn(name = "switch_device_id")
-    private SwitchDevice switchDevice; // Связь с SwitchDevice
+    private Switch switchDevice;
 
     @ManyToOne
     @JoinColumn(name = "relay_device_id")
-    private RelayDevice relayDevice;
+    private Relay relayDevice;
 
-    @ManyToOne
-    @JoinColumn(name = "relay_section_id")
-    private RelaySection relaySection;
-
-    @ManyToOne
-    @JoinColumn(name = "switch_section_id")
-    private SwitchSection switchSection;
 }

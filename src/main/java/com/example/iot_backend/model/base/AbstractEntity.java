@@ -1,5 +1,6 @@
-package com.example.iot_backend.model.object;
+package com.example.iot_backend.model.base;
 
+import com.example.iot_backend.model.settings.WiFiParameters;
 import jakarta.persistence.*;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -31,6 +32,21 @@ public abstract class AbstractEntity implements Serializable {
     private LocalDateTime removedAt;
     @Column(name="modified_at",nullable = false)
     private LocalDateTime modifiedAt;
+    @Column(name="device_type",nullable = false)
+    private String deviceType;
+    @Column(name="status",nullable = false)
+    private String status;
+    @Column(name="firmware_version",nullable = false)
+    private int firmwareVersion;
+    @Column(name = "manufacturer")
+    private String manufacturer;
+    @Column(name = "model")
+    private String model;
+    @Embedded
+    WiFiParameters wiFiParameters;
+
+
+
 //    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "user_id_created_at")
 //    private User createdAtUser;

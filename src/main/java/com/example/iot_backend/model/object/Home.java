@@ -1,6 +1,7 @@
 package com.example.iot_backend.model.object;
 
 
+import com.example.iot_backend.model.base.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;

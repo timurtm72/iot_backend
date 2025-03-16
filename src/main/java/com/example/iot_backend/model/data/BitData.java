@@ -1,4 +1,5 @@
-package com.example.iot_backend.model.object;
+package com.example.iot_backend.model.data;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -11,7 +12,10 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Embeddable
-public class BitDeviceData {
+public class BitData {
+    @Column(name = "value", nullable = false)
     private Boolean value;
+
+    @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 }

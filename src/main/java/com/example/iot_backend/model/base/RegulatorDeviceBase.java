@@ -13,27 +13,25 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public abstract class RegulatorDeviceBase  implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "ip_address", nullable = false)
-    private String ipAddress;
+public abstract class RegulatorDeviceBase extends AbstractEntity implements Serializable {
     @Column(name = "reg_mode")
     @Enumerated(EnumType.STRING)
     private RegMode regMode;
+
     @Column(name = "set_value", nullable = false)
-    private Float setValue;
+    private Float value;
 
-    @Column(name = "hysteresis", nullable = false)
-    private Float hysteresis;
+    @Column(name = "value_name", nullable = false)
+    private String valueName;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "low_hysteresis", nullable = false)
+    private Float lowHysteresis;
+
+    @Column(name = "high_hysteresis", nullable = false)
+    private Float highHysteresis;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "value_name", nullable = false)
-    private String valueName;
+
 }
