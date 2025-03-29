@@ -1,7 +1,6 @@
 package com.example.iot_backend.model.base;
 
 import com.example.iot_backend.enums.DeviceType;
-import com.example.iot_backend.model.settings.WiFiParameters;
 import jakarta.persistence.*;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
@@ -11,6 +10,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 @MappedSuperclass
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public abstract class AbstractEntity implements Serializable {
+public abstract class AbstractDevice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id",nullable = false)
@@ -38,26 +38,6 @@ public abstract class AbstractEntity implements Serializable {
     private DeviceType deviceType;
     @Column(name="status",nullable = false)
     private String status;
-    @Column(name="firmware_version",nullable = false)
-    private int firmwareVersion;
-    @Column(name = "manufacturer")
-    private String manufacturer;
-    @Column(name = "model")
-    private String model;
-    @Embedded
-    WiFiParameters wiFiParameters;
-
-
-
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id_created_at")
-//    private User createdAtUser;
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id_modified_at")
-//    private User modifiedAtUser;
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id_removed_at")
-//    private User removedAtUser;
     @Column(name = "is_removed", nullable = false)
     private boolean isRemoved = Boolean.FALSE;
 
