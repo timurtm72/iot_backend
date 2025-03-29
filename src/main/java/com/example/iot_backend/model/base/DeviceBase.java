@@ -1,5 +1,6 @@
 package com.example.iot_backend.model.base;
 
+import com.example.iot_backend.enums.InOutType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,8 +27,9 @@ public abstract class DeviceBase implements Serializable {
     /**
      * Тип устройства (вход/выход)
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "in_out_type", nullable = false)
-    private String inOutType;
+    private InOutType inOutType;
 
     /**
      * Название устройства
