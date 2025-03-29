@@ -14,12 +14,12 @@ import java.util.List;
  * Устройство управления переключателями, использующее бинарные данные (включено/выключено).
  * Используется для работы с цифровыми входами (переключателями).
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Entity
 @Table(name = "switch_device")
 @SQLDelete(sql = "UPDATE switch_device SET is_removed = true WHERE id = ?")

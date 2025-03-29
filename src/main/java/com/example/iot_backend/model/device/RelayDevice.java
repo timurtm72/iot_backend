@@ -14,10 +14,12 @@ import java.util.List;
  * Устройство управления реле, использующее бинарные данные (включено/выключено).
  * Используется для работы с цифровыми выходами.
  */
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "relay_device")
 @SQLDelete(sql = "UPDATE relay_device SET is_removed = true WHERE id = ?")

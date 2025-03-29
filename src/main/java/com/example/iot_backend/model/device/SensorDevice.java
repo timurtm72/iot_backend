@@ -14,11 +14,12 @@ import java.util.List;
  * Устройство для сбора данных с датчиков, использующее данные с плавающей точкой.
  * Используется для работы с аналоговыми входами (датчиками).
  */
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Entity
 @Table(name = "sensor_device")
 @SQLDelete(sql = "UPDATE sensor_device SET is_removed = true WHERE id = ?")
