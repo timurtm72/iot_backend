@@ -1,14 +1,16 @@
 package com.example.iot_backend.model.initial;
 
-import com.example.iot_backend.model.base.AbstractEntity;
 import com.example.iot_backend.model.data.FloatData;
-import com.example.iot_backend.model.object.Room;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import java.util.List;
 
+/**
+ * Датчик (аналоговый вход).
+ * Представляет физический датчик, измеряющий аналоговые величины.
+ */
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,18 +18,24 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "sensor_device")
-@SQLDelete(sql = "UPDATE sensor_device SET is_removed = true WHERE id = ?")
+@Table(name = "sensor")
+@SQLDelete(sql = "UPDATE sensor SET is_removed = true WHERE id = ?")
 @Where(clause = "is_removed=false")
 public class Sensor {
+    /**
+     * Уникальный идентификатор датчика
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Коллекция значений с плавающей точкой от датчика
+     */
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
         name = "sensor_values",
-        joinColumns = @JoinColumn(name = "sensor_device_id")
+        joinColumns = @JoinColumn(name = "sensor_id")
     )
     private List<FloatData> sensorValues;
 }

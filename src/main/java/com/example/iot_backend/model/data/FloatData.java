@@ -5,6 +5,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Класс для хранения данных с плавающей точкой.
+ * Используется для представления аналоговых показаний датчиков.
+ */
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,9 +17,15 @@ import java.time.LocalDateTime;
 @ToString
 @Embeddable
 public class FloatData {
+    /**
+     * Значение с плавающей точкой
+     */
     @Column(name = "value", nullable = false)
     private Float value;
 
+    /**
+     * Временная метка измерения
+     */
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 }

@@ -9,6 +9,10 @@ import org.hibernate.annotations.Where;
 
 import java.util.List;
 
+/**
+ * Базовый класс для устройств, использующих данные с плавающей точкой.
+ * Используется как основа для датчиков и аналоговых устройств.
+ */
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,13 +21,19 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "float_device_base")
-@SQLDelete(sql = "UPDATE credentials SET is_removed = true WHERE id=?")
+@SQLDelete(sql = "UPDATE float_device_base SET is_removed = true WHERE id=?")
 @Where(clause = "is_removed=false")
 public class FloatDeviceBase extends DeviceBase {
+    /**
+     * Коллекция значений с плавающей точкой, связанных с устройством
+     */
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "float_values", joinColumns = @JoinColumn(name = "float_values_id"))
     private List<FloatData> floatValues;
 
+    /**
+     * Связь с датчиком, если устройство подключено к нему
+     */
     @ManyToOne
     @JoinColumn(name = "sensor_device_id")
     private Sensor sensorDevice;
