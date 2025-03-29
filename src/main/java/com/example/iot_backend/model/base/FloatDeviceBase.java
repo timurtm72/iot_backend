@@ -5,7 +5,7 @@ import com.example.iot_backend.model.data.FloatData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "float_device_base")
 @SQLDelete(sql = "UPDATE float_device_base SET is_removed = true WHERE id=?")
-@Where(clause = "is_removed=false")
+@SQLRestriction("is_removed=false")
 public class FloatDeviceBase extends DeviceBase {
     /**
      * Коллекция значений с плавающей точкой, связанных с устройством

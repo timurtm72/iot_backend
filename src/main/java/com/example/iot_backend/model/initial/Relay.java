@@ -4,7 +4,7 @@ import com.example.iot_backend.model.data.BitData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "relay")
 @SQLDelete(sql = "UPDATE relay SET is_removed = true WHERE id = ?")
-@Where(clause = "is_removed=false")
+@SQLRestriction("is_removed=false")
 public class Relay {
     /**
      * Уникальный идентификатор реле
@@ -38,4 +38,10 @@ public class Relay {
         joinColumns = @JoinColumn(name = "relay_id")
     )
     private List<BitData> relayValues;
+    
+    /**
+     * Флаг удаления для мягкого удаления записей
+     */
+    @Column(name = "is_removed", nullable = false)
+    private boolean isRemoved = Boolean.FALSE;
 }

@@ -4,7 +4,7 @@ import com.example.iot_backend.model.data.FloatData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "sensor")
 @SQLDelete(sql = "UPDATE sensor SET is_removed = true WHERE id = ?")
-@Where(clause = "is_removed=false")
+@SQLRestriction("is_removed=false")
 public class Sensor {
     /**
      * Уникальный идентификатор датчика
@@ -38,4 +38,10 @@ public class Sensor {
         joinColumns = @JoinColumn(name = "sensor_id")
     )
     private List<FloatData> sensorValues;
+    
+    /**
+     * Флаг удаления для мягкого удаления записей
+     */
+    @Column(name = "is_removed", nullable = false)
+    private boolean isRemoved = Boolean.FALSE;
 }

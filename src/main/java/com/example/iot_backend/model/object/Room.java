@@ -4,7 +4,7 @@ import com.example.iot_backend.model.base.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 /**
  * Класс, представляющий комнату в доме.
@@ -19,7 +19,7 @@ import org.hibernate.annotations.Where;
 @Entity
 @Table(name = "room")
 @SQLDelete(sql = "UPDATE room SET is_removed = true WHERE id = ?")
-@Where(clause = "is_removed=false")
+@SQLRestriction("is_removed=false")
 public class Room extends AbstractEntity {
     /**
      * Связь с домом, в котором находится комната

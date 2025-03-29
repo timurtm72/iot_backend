@@ -4,7 +4,7 @@ import com.example.iot_backend.model.data.BitData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "switch")
 @SQLDelete(sql = "UPDATE switch SET is_removed = true WHERE id = ?")
-@Where(clause = "is_removed=false")
+@SQLRestriction("is_removed=false")
 public class Switch {
     /**
      * Уникальный идентификатор переключателя
@@ -39,4 +39,10 @@ public class Switch {
         joinColumns = @JoinColumn(name = "switch_id")
     )
     private List<BitData> switchValues;
+    
+    /**
+     * Флаг удаления для мягкого удаления записей
+     */
+    @Column(name = "is_removed", nullable = false)
+    private boolean isRemoved = Boolean.FALSE;
 }
