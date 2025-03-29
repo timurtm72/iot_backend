@@ -6,8 +6,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * Базовый абстрактный класс для всех устройств.
- * Содержит общие поля и функциональность для всех типов устройств.
+ * Базовый класс для всех устройств
  */
 @MappedSuperclass
 @EqualsAndHashCode
