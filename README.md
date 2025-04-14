@@ -1,14 +1,9 @@
-Проанализирую вашу кодовую базу и предоставлю описание проекта на русском языке в формате markdown.
+# Мой сайт и резюме:
 
-Ran tool
+- [Мой сайт:](https://technocom.site123.me/)
+- [Мое резюме инженер программист microcontrollers, PLC:](https://innopolis.hh.ru/resume/782d86d5ff0e9487200039ed1f6f3373384b30)
+- [Мое резюме инженер программист Java backend developer (Spring):](https://innopolis.hh.ru/resume/9e3b451aff03fd23830039ed1f496e79587649)
 
-Read file: src/main/java/com/example/iot_backend/IotBackendApplication.java
-
-Search files...
-
-Search files...
-
-Search files...
 # IoT Backend - Система управления устройствами умного дома
 
 ## Описание проекта
