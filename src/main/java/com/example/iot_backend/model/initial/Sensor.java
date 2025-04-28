@@ -1,47 +1,49 @@
 package com.example.iot_backend.model.initial;
 
-import com.example.iot_backend.model.data.FloatData;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
-import java.util.List;
+import com.example.iot_backend.model.base.AbstractEntity;
+import com.example.iot_backend.model.data.FloatData; // Импорт класса для хранения данных с плавающей точкой
+import jakarta.persistence.*; // Импорт аннотаций JPA
+import lombok.*; // Импорт аннотаций Lombok
+import org.hibernate.annotations.SQLDelete; // Импорт аннотации для мягкого удаления
+import org.hibernate.annotations.Where; // Импорт аннотации для фильтрации удаленных записей
 
-/**
- * Датчик (аналоговый вход).
- * Представляет физический датчик, измеряющий аналоговые величины.
- */
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@Entity
-@Table(name = "sensor")
-@SQLDelete(sql = "UPDATE sensor SET is_removed = true WHERE id = ?")
-@SQLRestriction("is_removed=false")
+import java.util.ArrayList; // Импорт класса ArrayList
+import java.util.List; // Импорт интерфейса List
+
+@EqualsAndHashCode // Генерирует методы equals и hashCode
+@NoArgsConstructor // Генерирует конструктор без аргументов
+@AllArgsConstructor // Генерирует конструктор со всеми полями
+@Getter // Генерирует геттеры
+@Setter // Генерирует сеттеры
+@ToString // Генерирует метод toString
+@Entity // Указывает, что класс является сущностью JPA
+@Table(name = "sensor") // Задает имя таблицы в базе данных как "sensor" (исправлено с sensor_device)
+@SQLDelete(sql = "UPDATE sensor SET is_removed = true WHERE id = ?") // Определяет SQL-запрос для мягкого удаления
+@Where(clause = "is_removed=false") // Фильтрует записи, исключая помеченные как удаленные
 public class Sensor {
     /**
-     * Уникальный идентификатор датчика
+     * Уникальный идентификатор сенсора
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id // Указывает, что это поле является первичным ключом
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Указывает, что значение ID генерируется базой данных автоматически
+    private Long id; // Поле для хранения идентификатора
 
     /**
-     * Коллекция значений с плавающей точкой от датчика
+     * Флаг мягкого удаления
      */
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-        name = "sensor_values",
-        joinColumns = @JoinColumn(name = "sensor_id")
-    )
-    private List<FloatData> sensorValues;
-    
+    @Column(name = "is_removed", nullable = false) // Маппинг на колонку is_removed, не может быть null
+    private boolean isRemoved = Boolean.FALSE; // Поле для флага мягкого удаления, по умолчанию false
+
     /**
-     * Флаг удаления для мягкого удаления записей
+     * Коллекция значений, измеренных сенсором (например, температура, влажность) с временными метками.
+     * Использует ленивую загрузку для оптимизации производительности.
+     * Хранится в отдельной таблице "sensor_values".
      */
-    @Column(name = "is_removed", nullable = false)
-    private boolean isRemoved = Boolean.FALSE;
+    @ElementCollection(fetch = FetchType.LAZY) // Определяет коллекцию встраиваемых объектов с ленивой загрузкой
+    @CollectionTable(
+        name = "sensor_values", // Имя таблицы для хранения коллекции
+        joinColumns = @JoinColumn(name = "sensor_id") // Имя колонки для связи с таблицей sensor (исправлено с sensor_device_id)
+    )
+    @OrderBy("timestamp DESC") // Сортировка значений по временной метке в порядке убывания (последние первыми)
+    private List<FloatData> sensorValues = new ArrayList<>(); // Поле для хранения списка значений сенсора, инициализировано пустым списком
 }

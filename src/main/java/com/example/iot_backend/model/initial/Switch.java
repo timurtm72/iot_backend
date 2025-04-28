@@ -1,48 +1,49 @@
 package com.example.iot_backend.model.initial;
 
-import com.example.iot_backend.model.data.BitData;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-import java.util.List;
+import com.example.iot_backend.model.data.BitData; // Импорт класса для хранения бинарных данных
+import jakarta.persistence.*; // Импорт аннотаций JPA
+import lombok.*; // Импорт аннотаций Lombok
+import org.hibernate.annotations.SQLDelete; // Импорт аннотации для мягкого удаления
+import org.hibernate.annotations.Where; // Импорт аннотации для фильтрации удаленных записей
 
-/**
- * Переключатель (цифровой вход).
- * Представляет физический выключатель или датчик с бинарными значениями.
- */
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@Entity
-@Table(name = "switch")
-@SQLDelete(sql = "UPDATE switch SET is_removed = true WHERE id = ?")
-@SQLRestriction("is_removed=false")
+import java.util.ArrayList; // Импорт класса ArrayList
+import java.util.List; // Импорт интерфейса List
+
+@EqualsAndHashCode // Генерирует методы equals и hashCode
+@NoArgsConstructor // Генерирует конструктор без аргументов
+@AllArgsConstructor // Генерирует конструктор со всеми полями
+@Getter // Генерирует геттеры
+@Setter // Генерирует сеттеры
+@ToString // Генерирует метод toString
+@Entity // Указывает, что класс является сущностью JPA
+@Table(name = "switch") // Задает имя таблицы в базе данных как "switch" (исправлено с switch_device)
+@SQLDelete(sql = "UPDATE switch SET is_removed = true WHERE id = ?") // Определяет SQL-запрос для мягкого удаления
+@Where(clause = "is_removed=false") // Фильтрует записи, исключая помеченные как удаленные
 public class Switch {
     /**
      * Уникальный идентификатор переключателя
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id // Указывает, что это поле является первичным ключом
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Указывает, что значение ID генерируется базой данных автоматически
+    private Long id; // Поле для хранения идентификатора
 
     /**
-     * Коллекция бинарных значений переключателя
+     * Флаг мягкого удаления
      */
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(
-        name = "switch_values",
-        joinColumns = @JoinColumn(name = "switch_id")
-    )
-    private List<BitData> switchValues;
-    
+    @Column(name = "is_removed", nullable = false) // Маппинг на колонку is_removed, не может быть null
+    private boolean isRemoved = Boolean.FALSE; // Поле для флага мягкого удаления, по умолчанию false
+
     /**
-     * Флаг удаления для мягкого удаления записей
+     * Коллекция значений состояния переключателя (включено/выключено) с временными метками.
+     * Использует ленивую загрузку для оптимизации производительности.
+     * Хранится в отдельной таблице "switch_values".
      */
-    @Column(name = "is_removed", nullable = false)
-    private boolean isRemoved = Boolean.FALSE;
+    @ElementCollection(fetch = FetchType.LAZY) // Определяет коллекцию встраиваемых объектов с ленивой загрузкой
+    @CollectionTable(
+        name = "switch_values", // Имя таблицы для хранения коллекции
+        joinColumns = @JoinColumn(name = "switch_id") // Имя колонки для связи с таблицей switch (исправлено с switch_device_id)
+    )
+    @OrderBy("timestamp DESC") // Сортировка значений по временной метке в порядке убывания (последние первыми)
+    private List<BitData> switchValues = new ArrayList<>(); // Поле для хранения списка значений переключателя, инициализировано пустым списком
 }
