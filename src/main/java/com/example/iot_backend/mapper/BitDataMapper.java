@@ -1,37 +1,27 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.BitDataDto; // Импорт BitDataDto
-import com.example.iot_backend.model.data.BitData; // Импорт встраиваемого класса BitData
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.BitDataDto; // Импортируем класс BitDataDto (DTO).
+import com.example.iot_backend.model.data.BitData; // Импортируем класс BitData (встраиваемая сущность).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
 
 /**
- * Маппер для преобразования между встраиваемым классом BitData и BitDataDto.
+ * Маппер для преобразования между встраиваемым классом BitData и BitDataDto. // JavaDoc, описывающий маппер.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class BitDataMapper implements IMapper<BitData, BitDataDto> { // Реализация интерфейса IMapper для BitData и BitDataDto
-
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING) // Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+public interface BitDataMapper { // Объявляем публичный интерфейс BitDataMapper.
 
     /**
-     * Преобразует BitData в BitDataDto.
-     * @param bitData Встраиваемый объект BitData
-     * @return BitDataDto DTO
+     * Преобразует BitData в BitDataDto. // JavaDoc для метода toDto.
+     * @param entity Встраиваемый объект BitData // Входной параметр - сущность.
+     * @return BitDataDto DTO // Возвращаемое значение - DTO.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public BitDataDto toDto(BitData bitData) { // Реализация метода преобразования в DTO
-        return mapperUtil.getMapper().map(bitData, BitDataDto.class); // Использование ModelMapper для преобразования bitData в BitDataDto
-    }
+    BitDataDto toDto(BitData entity); // Абстрактный метод. MapStruct автоматически сгенерирует реализацию для копирования полей 'value' и 'timestamp'.
 
     /**
-     * Преобразует BitDataDto в BitData.
-     * @param bitDataDto DTO BitDataDto
-     * @return BitData Встраиваемый объект
+     * Преобразует BitDataDto в BitData. // JavaDoc для метода toEntity.
+     * @param dto DTO BitDataDto // Входной параметр - DTO.
+     * @return BitData Встраиваемый объект // Возвращаемое значение - сущность.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public BitData toEntity(BitDataDto bitDataDto) { // Реализация метода преобразования в сущность (в данном случае, встраиваемый объект)
-        return mapperUtil.getMapper().map(bitDataDto, BitData.class); // Использование ModelMapper для преобразования bitDataDto в BitData
-    }
+    BitData toEntity(BitDataDto dto); // Абстрактный метод. MapStruct автоматически сгенерирует реализацию для копирования полей 'value' и 'timestamp'.
 }

@@ -1,40 +1,69 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.SwitchDeviceDto; // Импорт DTO для устройства-переключателя
-import com.example.iot_backend.model.device.SwitchDevice; // Импорт сущности SwitchDevice (предполагаемый путь, исправьте при необходимости)
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import com.example.iot_backend.mapper.IMapper; // Импорт базового интерфейса маппера
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.SwitchDeviceDto; // Импортируем класс SwitchDeviceDto (DTO).
+import com.example.iot_backend.model.device.SwitchDevice; // Импортируем класс SwitchDevice (сущность).
+import com.example.iot_backend.model.initial.Switch; // Импортируем сущность Switch.
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.Mapping; // Импортируем аннотацию @Mapping из MapStruct для настройки маппинга.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
+import org.mapstruct.MappingTarget; // Импортируем аннотацию @MappingTarget для методов обновления.
 
-/**
- * Маппер для преобразования между сущностью SwitchDevice и SwitchDeviceDto.
- */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil (для final полей)
-public class SwitchDeviceMapper implements IMapper<SwitchDevice, SwitchDeviceDto> { // Реализация интерфейса IMapper для SwitchDevice и SwitchDeviceDto
+import java.util.List; // Импортируем интерфейс List.
+import java.util.stream.Collectors; // Импортируем Collectors для работы со стримами.
 
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
+// Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+// `uses = {SwitchMapper.class}` не обязателен, если используем default-метод для маппинга ID.
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {SwitchMapper.class})
+public interface SwitchDeviceMapper { // Объявляем публичный интерфейс SwitchDeviceMapper.
 
-    /**
-     * Преобразует сущность SwitchDevice в SwitchDeviceDto.
-     * @param switchDevice Сущность SwitchDevice
-     * @return SwitchDeviceDto DTO
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса IMapper
-    public SwitchDeviceDto toDto(SwitchDevice switchDevice) { // Реализация метода преобразования сущности в DTO
-        // Использует ModelMapper из MapperUtil для копирования данных из сущности в новый объект DTO
-        return mapperUtil.getMapper().map(switchDevice, SwitchDeviceDto.class);
+    // Entity -> DTO // Комментарий к секции маппинга Сущность -> DTO.
+    @Mapping(source = "room.id", target = "roomId") // Мапим ID комнаты.
+    @Mapping(source = "switches", target = "switchIds") // Мапим список Switch в список их ID, используя default-метод ниже.
+    // Автомаппинг полей из SwitchDevice, DeviceBase, AbstractEntity, совпадающих с DTO по имени и типу.
+    SwitchDeviceDto toDto(SwitchDevice entity); // Абстрактный метод. MapStruct сгенерирует реализацию.
+
+    // DTO -> Entity // Комментарий к секции маппинга DTO -> Сущность.
+    // Мапятся поля из DTO в соответствующие поля SwitchDevice/DeviceBase/AbstractEntity.
+    @Mapping(target = "id", ignore = true) // Игнорируем `id`.
+    @Mapping(target = "room", ignore = true) // Игнорируем `room`: связь устанавливается в сервисе.
+    @Mapping(target = "switches", ignore = true) // Игнорируем `switches`: связь устанавливается в сервисе.
+    @Mapping(target = "createdAt", ignore = true) // Игнорируем `createdAt`.
+    @Mapping(target = "modifiedAt", ignore = true) // Игнорируем `modifiedAt`.
+    @Mapping(target = "removed", ignore = true) // Игнорируем `isRemoved`.
+    @Mapping(target = "removedAt", ignore = true) // Игнорируем `removedAt`.
+    @Mapping(target = "deviceType", ignore = true) // Игнорируем унаследованное поле `deviceType`.
+    @Mapping(target = "status", ignore = true) // Игнорируем унаследованное поле `status`.
+    @Mapping(target = "firmwareVersion", ignore = true) // Игнорируем унаследованное поле `firmwareVersion`.
+    @Mapping(target = "manufacturer", ignore = true) // Игнорируем унаследованное поле `manufacturer`.
+    @Mapping(target = "model", ignore = true) // Игнорируем унаследованное поле `model`.
+    @Mapping(target = "wiFiParameters", ignore = true) // Игнорируем унаследованное поле `wiFiParameters`.
+    SwitchDevice toEntity(SwitchDeviceDto dto); // Абстрактный метод. MapStruct сгенерирует реализацию для создания новой сущности.
+
+    // Вспомогательный метод для маппинга списка Switch в список ID // Комментарий к default-методу.
+    default List<Long> mapSwitchesToSwitchIds(List<Switch> switches) { // Default-метод для преобразования списка Switch в список их ID.
+        if (switches == null) { // Проверка на null.
+            return null; // Возвращаем null, если список пуст.
+        }
+        return switches.stream() // Создаем стрим из списка Switch.
+                .map(Switch::getId) // Для каждого элемента Switch получаем его ID.
+                .collect(Collectors.toList()); // Собираем ID в новый список.
     }
 
-    /**
-     * Преобразует SwitchDeviceDto в сущность SwitchDevice.
-     * @param switchDeviceDto DTO SwitchDeviceDto
-     * @return SwitchDevice Сущность
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса IMapper
-    public SwitchDevice toEntity(SwitchDeviceDto switchDeviceDto) { // Реализация метода преобразования DTO в сущность
-        // Использует ModelMapper из MapperUtil для копирования данных из DTO в новый объект сущности
-        return mapperUtil.getMapper().map(switchDeviceDto, SwitchDevice.class);
-    }
+    // Метод обновления существующей сущности SwitchDevice из SwitchDeviceDto // Комментарий к методу обновления.
+    @Mapping(target = "id", ignore = true) // Игнорируем `id`.
+    @Mapping(target = "room", ignore = true) // Игнорируем `room`.
+    @Mapping(target = "switches", ignore = true) // Игнорируем `switches`.
+    @Mapping(target = "createdAt", ignore = true) // Игнорируем `createdAt`.
+    @Mapping(target = "modifiedAt", ignore = true) // Игнорируем `modifiedAt`.
+    @Mapping(target = "removed", ignore = true) // Игнорируем `isRemoved`.
+    @Mapping(target = "removedAt", ignore = true) // Игнорируем `removedAt`.
+    @Mapping(target = "deviceType", ignore = true) // Игнорируем `deviceType`.
+    @Mapping(target = "status", ignore = true) // Игнорируем `status`.
+    @Mapping(target = "firmwareVersion", ignore = true) // Игнорируем `firmwareVersion`.
+    @Mapping(target = "manufacturer", ignore = true) // Игнорируем `manufacturer`.
+    @Mapping(target = "model", ignore = true) // Игнорируем `model`.
+    @Mapping(target = "wiFiParameters", ignore = true) // Игнорируем `wiFiParameters`.
+    // Аннотация `@MappingTarget` указывает MapStruct обновлять переданный объект `entity`.
+    void updateFromDto(SwitchDeviceDto dto, @MappingTarget SwitchDevice entity); // Абстрактный метод обновления.
 }

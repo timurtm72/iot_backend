@@ -1,37 +1,29 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.LocationDto; // Импорт LocationDto
-import com.example.iot_backend.model.object.Location; // Импорт встраиваемого класса Location
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.LocationDto; // Импортируем класс LocationDto, который будет использоваться как объект передачи данных (Data Transfer Object).
+import com.example.iot_backend.model.object.Location; // Импортируем класс Location, который является встраиваемой сущностью (Embeddable).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из библиотеки MapStruct.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct, включая ComponentModel.
 
 /**
- * Маппер для преобразования между встраиваемым классом Location и LocationDto.
+ * Маппер для преобразования между встраиваемым классом Location и LocationDto. // JavaDoc комментарий, описывающий назначение интерфейса.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class LocationMapper implements IMapper<Location, LocationDto> { // Реализация интерфейса IMapper для Location и LocationDto
-
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING) // Аннотация MapStruct: указывает, что это интерфейс маппера. `componentModel = "spring"` говорит MapStruct сгенерировать реализацию этого маппера как Spring компонент (@Component).
+public interface LocationMapper extends IMapper<Location, LocationDto> { // Объявляем публичный интерфейс LocationMapper. Он наследует IMapper (если он используется) для базовых методов.
 
     /**
-     * Преобразует Location в LocationDto.
-     * @param location Встраиваемый объект Location
-     * @return LocationDto DTO
+     * Преобразует Location в LocationDto. // JavaDoc для метода toDto.
+     * @param entity Встраиваемый объект Location // Описываем входной параметр - сущность Location.
+     * @return LocationDto DTO // Описываем возвращаемое значение - DTO LocationDto.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public LocationDto toDto(Location location) { // Реализация метода преобразования в DTO
-        return mapperUtil.getMapper().map(location, LocationDto.class); // Использование ModelMapper для преобразования location в LocationDto
-    }
+    @Override // Аннотация показывает, что этот метод переопределяет метод из родительского интерфейса (IMapper). Если IMapper не используется, эту аннотацию можно убрать.
+    LocationDto toDto(Location entity); // Абстрактный метод. MapStruct автоматически сгенерирует его реализацию для копирования полей из Location в LocationDto.
 
     /**
-     * Преобразует LocationDto в Location.
-     * @param locationDto DTO LocationDto
-     * @return Location Встраиваемый объект
+     * Преобразует LocationDto в Location. // JavaDoc для метода toEntity.
+     * @param dto DTO LocationDto // Описываем входной параметр - DTO LocationDto.
+     * @return Location Встраиваемый объект // Описываем возвращаемое значение - сущность Location.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public Location toEntity(LocationDto locationDto) { // Реализация метода преобразования во встраиваемый объект
-        return mapperUtil.getMapper().map(locationDto, Location.class); // Использование ModelMapper для преобразования locationDto в Location
-    }
+    @Override // Аннотация показывает, что этот метод переопределяет метод из родительского интерфейса (IMapper). Если IMapper не используется, эту аннотацию можно убрать.
+    Location toEntity(LocationDto dto); // Абстрактный метод. MapStruct автоматически сгенерирует его реализацию для копирования полей из LocationDto в Location.
 }

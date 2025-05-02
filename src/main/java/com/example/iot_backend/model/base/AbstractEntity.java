@@ -3,10 +3,6 @@ package com.example.iot_backend.model.base;
 import com.example.iot_backend.enums.DeviceType;
 import com.example.iot_backend.model.settings.WiFiParameters;
 import jakarta.persistence.*;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
-
 import lombok.*;
 
 import java.io.Serializable;

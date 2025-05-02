@@ -1,54 +1,22 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.SwitchDto; // Импорт SwitchDto
-import com.example.iot_backend.model.initial.Switch; // Импорт сущности Switch
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.SwitchDto; // Импортируем класс SwitchDto (DTO).
+import com.example.iot_backend.model.initial.Switch; // Импортируем класс Switch (сущность).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.Mapping; // Импортируем аннотацию @Mapping из MapStruct для настройки маппинга.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
 
 /**
- * Маппер для преобразования между сущностью Switch и SwitchDto.
+ * Маппер для преобразования между сущностью Switch и SwitchDto. // JavaDoc, описывающий маппер.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class SwitchMapper implements IMapper<Switch, SwitchDto> { // Реализация интерфейса IMapper для Switch и SwitchDto
+// Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+// `uses = {BitDataMapper.class}` говорит MapStruct использовать BitDataMapper для маппинга полей типа BitData/BitDataDto (в данном случае, для списка switchValues).
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {BitDataMapper.class})
+public interface SwitchMapper { // Объявляем публичный интерфейс SwitchMapper.
+    // Маппинг id и switchValues происходит автоматически с использованием BitDataMapper // Комментарий описывает автоматический маппинг.
+    SwitchDto toDto(Switch entity); // Абстрактный метод. MapStruct сгенерирует реализацию. Он смапит `id` и использует `BitDataMapper` для преобразования `List<BitData> switchValues` в `List<BitDataDto> switchValues`.
 
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
-    private final BitDataMapper bitDataMapper; // Внедрение маппера для вложенных данных BitData
-
-    /**
-     * Преобразует сущность Switch в SwitchDto.
-     * Требует ручного маппинга для списка switchValues.
-     * @param switchEntity Сущность Switch
-     * @return SwitchDto DTO
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public SwitchDto toDto(Switch switchEntity) { // Реализация метода преобразования в DTO
-        SwitchDto dto = mapperUtil.getMapper().map(switchEntity, SwitchDto.class); // Базовый маппинг полей (id)
-        // Ручной маппинг списка BitData в BitDataDto
-        if (switchEntity.getSwitchValues() != null) { // Проверка на null перед маппингом списка
-            dto.setSwitchValues(switchEntity.getSwitchValues().stream() // Получение потока из списка сущностей BitData
-                    .map(bitDataMapper::toDto) // Преобразование каждого BitData в BitDataDto с помощью bitDataMapper
-                    .toList()); // Сбор результата в новый список List<BitDataDto>
-        }
-        return dto; // Возврат DTO с заполненным списком
-    }
-
-    /**
-     * Преобразует SwitchDto в сущность Switch.
-     * Требует ручного маппинга для списка switchValues.
-     * @param switchDto DTO SwitchDto
-     * @return Switch Сущность
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public Switch toEntity(SwitchDto switchDto) { // Реализация метода преобразования в сущность
-        Switch entity = mapperUtil.getMapper().map(switchDto, Switch.class); // Базовый маппинг полей (id)
-        // Ручной маппинг списка BitDataDto в BitData
-        if (switchDto.getSwitchValues() != null) { // Проверка на null перед маппингом списка
-            entity.setSwitchValues(switchDto.getSwitchValues().stream() // Получение потока из списка DTO BitDataDto
-                    .map(bitDataMapper::toEntity) // Преобразование каждого BitDataDto в BitData с помощью bitDataMapper
-                    .toList()); // Сбор результата в новый список List<BitData>
-        }
-        return entity; // Возврат сущности с заполненным списком
-    }
+    // Игнорируем isRemoved при маппинге из DTO // Комментарий поясняет назначение @Mapping.
+    @Mapping(target = "removed", ignore = true) // Аннотация MapStruct: указывает игнорировать поле 'isRemoved' в цели (Switch) при маппинге из DTO.
+    Switch toEntity(SwitchDto dto); // Абстрактный метод. MapStruct сгенерирует реализацию. Он смапит `id`, использует `BitDataMapper` для списка `switchValues` и проигнорирует `isRemoved`.
 }

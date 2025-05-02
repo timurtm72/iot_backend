@@ -1,54 +1,22 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.RelayDto; // Импорт RelayDto
-import com.example.iot_backend.model.initial.Relay; // Импорт сущности Relay
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.RelayDto; // Импортируем класс RelayDto (DTO).
+import com.example.iot_backend.model.initial.Relay; // Импортируем класс Relay (сущность).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.Mapping; // Импортируем аннотацию @Mapping из MapStruct для настройки маппинга.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
 
 /**
- * Маппер для преобразования между сущностью Relay и RelayDto.
+ * Маппер для преобразования между сущностью Relay и RelayDto. // JavaDoc, описывающий маппер.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class RelayMapper implements IMapper<Relay, RelayDto> { // Реализация интерфейса IMapper для Relay и RelayDto
+// Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+// `uses = {BitDataMapper.class}` говорит MapStruct использовать BitDataMapper для маппинга полей типа BitData/BitDataDto (в данном случае, для списка relayValues).
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {BitDataMapper.class})
+public interface RelayMapper { // Объявляем публичный интерфейс RelayMapper.
+    // Маппинг id и relayValues происходит автоматически с использованием BitDataMapper // Комментарий описывает автоматический маппинг.
+    RelayDto toDto(Relay entity); // Абстрактный метод. MapStruct сгенерирует реализацию. Он смапит `id` и использует `BitDataMapper` для преобразования `List<BitData> relayValues` в `List<BitDataDto> relayValues`.
 
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
-    private final BitDataMapper bitDataMapper; // Внедрение маппера для вложенных данных BitData
-
-    /**
-     * Преобразует сущность Relay в RelayDto.
-     * Требует ручного маппинга для списка relayValues.
-     * @param relay Сущность Relay
-     * @return RelayDto DTO
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public RelayDto toDto(Relay relay) { // Реализация метода преобразования в DTO
-        RelayDto dto = mapperUtil.getMapper().map(relay, RelayDto.class); // Базовый маппинг полей (id)
-        // Ручной маппинг списка BitData в BitDataDto
-        if (relay.getRelayValues() != null) { // Проверка на null перед маппингом списка
-            dto.setRelayValues(relay.getRelayValues().stream() // Получение потока из списка сущностей BitData
-                    .map(bitDataMapper::toDto) // Преобразование каждого BitData в BitDataDto с помощью bitDataMapper
-                    .toList()); // Сбор результата в новый список List<BitDataDto>
-        }
-        return dto; // Возврат DTO с заполненным списком
-    }
-
-    /**
-     * Преобразует RelayDto в сущность Relay.
-     * Требует ручного маппинга для списка relayValues.
-     * @param relayDto DTO RelayDto
-     * @return Relay Сущность
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public Relay toEntity(RelayDto relayDto) { // Реализация метода преобразования в сущность
-        Relay entity = mapperUtil.getMapper().map(relayDto, Relay.class); // Базовый маппинг полей (id)
-        // Ручной маппинг списка BitDataDto в BitData
-        if (relayDto.getRelayValues() != null) { // Проверка на null перед маппингом списка
-            entity.setRelayValues(relayDto.getRelayValues().stream() // Получение потока из списка DTO BitDataDto
-                    .map(bitDataMapper::toEntity) // Преобразование каждого BitDataDto в BitData с помощью bitDataMapper
-                    .toList()); // Сбор результата в новый список List<BitData>
-        }
-        return entity; // Возврат сущности с заполненным списком
-    }
+    // Игнорируем isRemoved при маппинге из DTO // Комментарий поясняет назначение @Mapping.
+    @Mapping(target = "removed", ignore = true) // Аннотация MapStruct: указывает игнорировать поле 'isRemoved' в цели (Relay) при маппинге из DTO.
+    Relay toEntity(RelayDto dto); // Абстрактный метод. MapStruct сгенерирует реализацию. Он смапит `id`, использует `BitDataMapper` для списка `relayValues` и проигнорирует `isRemoved`.
 }

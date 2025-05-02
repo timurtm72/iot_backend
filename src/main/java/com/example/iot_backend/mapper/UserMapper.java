@@ -1,37 +1,40 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.UserDto; // Импорт UserDto
-import com.example.iot_backend.model.object.User; // Импорт сущности User (убедитесь, что путь правильный)
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.UserDto; // Импортируем класс UserDto (DTO для создания/обновления пользователя).
+import com.example.iot_backend.model.object.User; // Импортируем класс User (сущность пользователя).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.Mapping; // Импортируем аннотацию @Mapping из MapStruct для настройки маппинга.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
+import org.mapstruct.MappingTarget; // Импортируем аннотацию @MappingTarget для методов обновления.
 
 /**
- * Маппер для преобразования между сущностью User и UserDto.
+ * Маппер для преобразования между сущностью User и UserDto. // JavaDoc, описывающий маппер.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class UserMapper implements IMapper<User, UserDto> { // Реализация интерфейса IMapper для User и UserDto
+// Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+// `uses = {HomeMapper.class}` было бы нужно, если бы мы мапили поле `homes`.
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING /*, uses = {HomeMapper.class} - если бы homes мапились */)
+public interface UserMapper { // Объявляем публичный интерфейс UserMapper.
 
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
+    // Entity -> DTO: // Комментарий к секции маппинга Сущность -> DTO.
+    // Мапятся: id, firstName, lastName, role, email, login // Пояснение авто-маппинга.
+    // Не мапятся (нет в UserDto): password, homes, isRemoved // Пояснение неявного игнорирования полей.
+    UserDto toDto(User entity); // Абстрактный метод. MapStruct сгенерирует реализацию для копирования полей из User в UserDto, игнорируя отсутствующие в DTO.
 
-    /**
-     * Преобразует сущность User в UserDto.
-     * @param user Сущность User
-     * @return UserDto DTO
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public UserDto toDto(User user) { // Реализация метода преобразования в DTO
-        return mapperUtil.getMapper().map(user, UserDto.class); // Использование ModelMapper для преобразования user в UserDto
-    }
+    // DTO -> Entity: // Комментарий к секции маппинга DTO -> Сущность.
+    // Мапятся: firstName, lastName, role, email, login // Пояснение авто-маппинга.
+    // Не мапятся (нужно игнорировать): // Пояснение полей, которые будут проигнорированы с помощью @Mapping.
+    @Mapping(target = "id", ignore = true) // Игнорируем `id`: он либо null (при создании), либо берется из существующей сущности (при обновлении).
+    @Mapping(target = "password", ignore = true) // Игнорируем `password`: хеширование и установка пароля должны происходить в сервисном слое.
+    @Mapping(target = "homes", ignore = true) // Игнорируем `homes`: управление связями ManyToMany обычно происходит отдельно.
+    @Mapping(target = "removed", ignore = true) // Игнорируем `isRemoved`: этот флаг управляется логикой удаления.
+    User toEntity(UserDto dto); // Абстрактный метод. MapStruct сгенерирует реализацию для создания новой сущности User из UserDto, игнорируя указанные поля.
 
-    /**
-     * Преобразует UserDto в сущность User.
-     * @param userDto DTO UserDto
-     * @return User Сущность
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public User toEntity(UserDto userDto) { // Реализация метода преобразования в сущность
-        return mapperUtil.getMapper().map(userDto, User.class); // Использование ModelMapper для преобразования userDto в User
-    }
+    // Метод для обновления существующей сущности из DTO: // Комментарий к методу обновления.
+    // Те же игнорирования, что и в toEntity // Пояснение, что игнорируются те же поля.
+    @Mapping(target = "id", ignore = true) // Игнорируем `id`.
+    @Mapping(target = "password", ignore = true) // Игнорируем `password`.
+    @Mapping(target = "homes", ignore = true) // Игнорируем `homes`.
+    @Mapping(target = "removed", ignore = true) // Игнорируем `isRemoved`.
+    // Аннотация `@MappingTarget` указывает MapStruct обновлять переданный объект `entity`, а не создавать новый.
+    void updateFromDto(UserDto dto, @MappingTarget User entity); // Абстрактный метод. MapStruct сгенерирует реализацию для обновления полей `entity` значениями из `dto`, игнорируя указанные поля.
 }

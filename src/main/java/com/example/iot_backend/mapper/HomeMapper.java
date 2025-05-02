@@ -1,40 +1,65 @@
-package com.example.iot_backend.mapper; // Объявление пакета для мапперов
+package com.example.iot_backend.mapper;
 
-import com.example.iot_backend.dto.HomeDto; // Импорт DTO для дома
-import com.example.iot_backend.model.object.Home; // Импорт сущности Home (предполагаемый путь, исправьте при необходимости)
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import com.example.iot_backend.mapper.IMapper; // Импорт базового интерфейса маппера
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.HomeDto;
+import com.example.iot_backend.model.object.Home;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
-/**
- * Маппер для преобразования между сущностью Home и HomeDto. // JavaDoc комментарий для класса
- */
-@Component // Указывает, что этот класс является компонентом Spring и должен управляться контейнером Spring
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для каждого final поля (в данном случае, для mapperUtil)
-public class HomeMapper implements IMapper<Home, HomeDto> { // Объявление класса HomeMapper, реализующего интерфейс IMapper для типов Home и HomeDto
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {RoomMapper.class, LocationMapper.class})
+public interface HomeMapper {
 
-    private final MapperUtil mapperUtil; // Объявление неизменяемого (final) поля для хранения экземпляра MapperUtil, будет внедрено через конструктор
+    // Entity -> DTO
+    // Мапятся: id, name, createdAt (из AbstractEntity), rooms (через RoomMapper)
+    // Мапим location.address -> address
+    // Игнорируем ownerId (неясно, как мапить из List<User>)
+    @Mapping(source = "location.address", target = "address")
+    @Mapping(target = "ownerId", ignore = true) // Игнорируем ownerId
+    HomeDto toDto(Home entity);
 
-    /**
-     * Преобразует сущность Home в HomeDto. // JavaDoc комментарий для метода toDto
-     * @param home Сущность Home // Описание параметра home
-     * @return HomeDto DTO // Описание возвращаемого значения
-     */
-    @Override // Аннотация указывает, что этот метод переопределяет метод из интерфейса IMapper
-    public HomeDto toDto(Home home) { // Реализация метода для преобразования сущности Home в HomeDto
-        // Использует ModelMapper, полученный из MapperUtil, для копирования данных из сущности home в новый объект HomeDto
-        return mapperUtil.getMapper().map(home, HomeDto.class); // Возвращает созданный объект HomeDto
-    }
+    // DTO -> Entity
+    // Мапятся: name (в AbstractEntity), rooms (через RoomMapper)
+    // Мапим address -> location.address
+    // Игнорируем ID, ownerId/users, createdAt и другие поля AbstractEntity
+    @Mapping(source = "address", target = "location.address")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "location.country", ignore = true) // Игнорируем остальные поля Location,
+    @Mapping(target = "location.city", ignore = true)    // если они не пришли в DTO
+    @Mapping(target = "users", ignore = true) // Связь с users управляется в сервисе
+    @Mapping(target = "description", ignore = true) // Нет в DTO
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "removed", ignore = true)
+    @Mapping(target = "removedAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "deviceType", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "firmwareVersion", ignore = true)
+    @Mapping(target = "manufacturer", ignore = true)
+    @Mapping(target = "model", ignore = true)
+    @Mapping(target = "wiFiParameters", ignore = true)
+    Home toEntity(HomeDto dto);
 
-    /**
-     * Преобразует HomeDto в сущность Home. // JavaDoc комментарий для метода toEntity
-     * @param homeDto DTO HomeDto // Описание параметра homeDto
-     * @return Home Сущность // Описание возвращаемого значения
-     */
-    @Override // Аннотация указывает, что этот метод переопределяет метод из интерфейса IMapper
-    public Home toEntity(HomeDto homeDto) { // Реализация метода для преобразования HomeDto в сущность Home
-        // Использует ModelMapper, полученный из MapperUtil, для копирования данных из DTO homeDto в новый объект Home
-        return mapperUtil.getMapper().map(homeDto, Home.class); // Возвращает созданный объект Home
-    }
+    // Метод обновления существующей сущности Home из HomeDto
+    @Mapping(source = "address", target = "location.address")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "location.country", ignore = true)
+    @Mapping(target = "location.city", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "removed", ignore = true)
+    @Mapping(target = "removedAt", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "deviceType", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "firmwareVersion", ignore = true)
+    @Mapping(target = "manufacturer", ignore = true)
+    @Mapping(target = "model", ignore = true)
+    @Mapping(target = "wiFiParameters", ignore = true)
+    // @Mapping(target = "rooms", ignore = true) // Обновление комнат - отдельная логика?
+    // Если нужно обновлять комнаты через HomeDto, убрать ignore=true для rooms
+    // и убедиться, что RoomMapper умеет обновлять (@MappingTarget)
+    void updateFromDto(HomeDto dto, @MappingTarget Home entity);
 }

@@ -1,40 +1,16 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.UserReadDto; // Импорт UserReadDto
-import com.example.iot_backend.model.object.User; // Импорт сущности User (убедитесь, что путь правильный)
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.UserReadDto; // Импортируем класс UserReadDto (DTO для чтения данных пользователя).
+import com.example.iot_backend.model.object.User; // Импортируем класс User (сущность пользователя).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
 
 /**
- * Маппер для преобразования между сущностью User и UserReadDto (без пароля).
+ * Маппер для преобразования между сущностью User и UserReadDto (без пароля). // JavaDoc, описывающий маппер. Уточняет, что пароль не мапится.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class UserReadMapper implements IMapper<User, UserReadDto> { // Реализация интерфейса IMapper для User и UserReadDto
-
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
-
-    /**
-     * Преобразует сущность User в UserReadDto.
-     * @param user Сущность User
-     * @return UserReadDto DTO для чтения
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public UserReadDto toDto(User user) { // Реализация метода преобразования в DTO
-        return mapperUtil.getMapper().map(user, UserReadDto.class); // Использование ModelMapper для преобразования user в UserReadDto
-    }
-
-    /**
-     * Преобразует UserReadDto в сущность User.
-     * ВНИМАНИЕ: Этот метод может быть не нужен или требовать особой логики,
-     * так как UserReadDto не содержит всех полей User (например, пароля).
-     * @param userReadDto DTO UserReadDto
-     * @return User Сущность (возможно, не полностью заполненная)
-     */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public User toEntity(UserReadDto userReadDto) { // Реализация метода преобразования в сущность
-        // ModelMapper может создать User, но поля, отсутствующие в DTO (пароль), будут null
-        return mapperUtil.getMapper().map(userReadDto, User.class); // Использование ModelMapper для преобразования userReadDto в User
-    }
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING) // Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+public interface UserReadMapper { // Объявляем публичный интерфейс UserReadMapper.
+    // Все поля (id, firstName, lastName, role, email, login) мапятся автоматически // Комментарий поясняет авто-маппинг.
+    // Поля password, homes, isRemoved в User игнорируются, так как их нет в UserReadDto // Комментарий поясняет, какие поля сущности игнорируются неявно.
+    UserReadDto toDto(User entity); // Абстрактный метод. MapStruct сгенерирует реализацию для копирования полей из User в UserReadDto. Метод `toEntity` не нужен, так как это DTO только для чтения.
 }

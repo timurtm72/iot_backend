@@ -18,6 +18,21 @@ public class WiFiParameters {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "security_type", nullable = false)
+    @Column(name = "security_type")
     private String securityType;
+
+    @Column(name = "static_ip", nullable = true)
+    private String staticIp;
+
+    @Column(name = "subnet_mask", nullable = true)
+    private String subnetMask;
+
+    @Column(name = "gateway", nullable = true)
+    private String gateway;
+
+    @Column(name = "dns1", nullable = true)
+    private String dns1;
+
+    @Column(name = "dns2", nullable = true)
+    private String dns2;
 }

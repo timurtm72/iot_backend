@@ -1,37 +1,27 @@
-package com.example.iot_backend.mapper; // Пакет для мапперов
+package com.example.iot_backend.mapper; // Объявляем пакет, в котором находится этот интерфейс маппера.
 
-import com.example.iot_backend.dto.FloatDataDto; // Импорт FloatDataDto
-import com.example.iot_backend.model.data.FloatData; // Импорт встраиваемого класса FloatData
-import com.example.iot_backend.utils.MapperUtil; // Импорт утилиты MapperUtil
-import lombok.RequiredArgsConstructor; // Импорт аннотации Lombok для генерации конструктора для final полей
-import org.springframework.stereotype.Component; // Импорт аннотации Component для регистрации бина в Spring
+import com.example.iot_backend.dto.FloatDataDto; // Импортируем класс FloatDataDto (DTO).
+import com.example.iot_backend.model.data.FloatData; // Импортируем класс FloatData (встраиваемая сущность).
+import org.mapstruct.Mapper; // Импортируем аннотацию @Mapper из MapStruct.
+import org.mapstruct.MappingConstants; // Импортируем константы MapStruct.
 
 /**
- * Маппер для преобразования между встраиваемым классом FloatData и FloatDataDto.
+ * Маппер для преобразования между встраиваемым классом FloatData и FloatDataDto. // JavaDoc, описывающий маппер.
  */
-@Component // Указывает, что этот класс является компонентом Spring и должен быть управляем контейнером
-@RequiredArgsConstructor // Генерирует конструктор с одним параметром для поля mapperUtil
-public class FloatDataMapper implements IMapper<FloatData, FloatDataDto> { // Реализация интерфейса IMapper для FloatData и FloatDataDto
-
-    private final MapperUtil mapperUtil; // Поле для хранения экземпляра MapperUtil, внедряется через конструктор
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING) // Аннотация MapStruct: указывает, что это интерфейс маппера, генерирующий Spring компонент.
+public interface FloatDataMapper { // Объявляем публичный интерфейс FloatDataMapper.
 
     /**
-     * Преобразует FloatData в FloatDataDto.
-     * @param floatData Встраиваемый объект FloatData
-     * @return FloatDataDto DTO
+     * Преобразует FloatData в FloatDataDto. // JavaDoc для метода toDto.
+     * @param entity Встраиваемый объект FloatData // Входной параметр - сущность.
+     * @return FloatDataDto DTO // Возвращаемое значение - DTO.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public FloatDataDto toDto(FloatData floatData) { // Реализация метода преобразования в DTO
-        return mapperUtil.getMapper().map(floatData, FloatDataDto.class); // Использование ModelMapper для преобразования floatData в FloatDataDto
-    }
+    FloatDataDto toDto(FloatData entity); // Абстрактный метод. MapStruct автоматически сгенерирует реализацию для копирования полей 'value' и 'timestamp'.
 
     /**
-     * Преобразует FloatDataDto в FloatData.
-     * @param floatDataDto DTO FloatDataDto
-     * @return FloatData Встраиваемый объект
+     * Преобразует FloatDataDto в FloatData. // JavaDoc для метода toEntity.
+     * @param dto DTO FloatDataDto // Входной параметр - DTO.
+     * @return FloatData Встраиваемый объект // Возвращаемое значение - сущность.
      */
-    @Override // Аннотация указывает, что метод переопределяет метод из интерфейса
-    public FloatData toEntity(FloatDataDto floatDataDto) { // Реализация метода преобразования во встраиваемый объект
-        return mapperUtil.getMapper().map(floatDataDto, FloatData.class); // Использование ModelMapper для преобразования floatDataDto в FloatData
-    }
+    FloatData toEntity(FloatDataDto dto); // Абстрактный метод. MapStruct автоматически сгенерирует реализацию для копирования полей 'value' и 'timestamp'.
 }
